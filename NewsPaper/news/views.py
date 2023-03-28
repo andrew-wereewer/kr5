@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic import DetailView
+from news.filters import PostFilter
 from .models import Post
 
 class PostList(ListView):
@@ -14,6 +15,8 @@ class PostList(ListView):
   # Это имя списка, в котором будут лежать все объекты.
   # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
   context_object_name = 'posts'
+
+  paginate_by = 10
 
 class PostDetail(DetailView):
   model = Post
