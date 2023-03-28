@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic import DetailView
+from django.views.generic import CreateView
 from news.filters import PostFilter
+from .forms import CreatePostForm
 from .models import Post
 
 class PostList(ListView):
@@ -58,3 +60,24 @@ class PostDetail(DetailView):
   model = Post
   template_name = 'post.html'
   context_object_name = 'post'
+
+class CreatePost(CreateView):
+    form_class = CreatePostForm
+    model = Post
+    template_name = 'create_post.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.isnews = False
+        return super().form_valid(form)
+
+
+class CreateNews(CreateView):
+    form_class = CreatePostForm
+    model = Post
+    template_name = 'create_news.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.isnews = True
+        return super().form_valid(form)

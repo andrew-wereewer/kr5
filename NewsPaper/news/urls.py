@@ -19,6 +19,9 @@ from . import views
 
 urlpatterns = [
     path('',         views.PostList.as_view()),
-    path('<int:pk>', views.PostDetail.as_view()),
+    path('<int:pk>', views.PostDetail.as_view(), name='post_detail'),
     path('search/',  views.PostSearch.as_view()),
+
+    path('article/create/', views.CreatePost.as_view()),
+    path('create/',         views.CreateNews.as_view()),
 ]
