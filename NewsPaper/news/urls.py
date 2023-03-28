@@ -24,4 +24,6 @@ urlpatterns = [
 
     path('article/create/', views.CreatePost.as_view()),
     path('create/',         views.CreateNews.as_view()),
+
+    path('<int:pk>/update/', views.UpdatePost.as_view())
 ]

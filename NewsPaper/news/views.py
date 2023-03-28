@@ -1,7 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
-from django.views.generic import DetailView
-from django.views.generic import CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from news.filters import PostFilter
 from .forms import CreatePostForm
 from .models import Post
@@ -81,3 +79,8 @@ class CreateNews(CreateView):
         post = form.save(commit=False)
         post.isnews = True
         return super().form_valid(form)
+
+class UpdatePost(UpdateView):
+    form_class = CreatePostForm
+    model = Post
+    template_name = 'edit_post.html'
