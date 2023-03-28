@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from news.filters import PostFilter
 from .forms import CreatePostForm
 from .models import Post
@@ -69,7 +70,6 @@ class CreatePost(CreateView):
         post.isnews = False
         return super().form_valid(form)
 
-
 class CreateNews(CreateView):
     form_class = CreatePostForm
     model = Post
@@ -84,3 +84,8 @@ class UpdatePost(UpdateView):
     form_class = CreatePostForm
     model = Post
     template_name = 'edit_post.html'
+
+class DeletePost(DeleteView):
+    model = Post
+    template_name = 'delete_post.html'
+    success_url = reverse_lazy('post_list')
