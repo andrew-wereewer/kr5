@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin)
 from news.filters import PostFilter
 from .forms import CreatePostForm
 from .models import Post
@@ -64,8 +64,9 @@ class PostDetail(LoginRequiredMixin, DetailView):
   template_name = 'post.html'
   context_object_name = 'post'
 
-class CreatePost(LoginRequiredMixin, CreateView):
+class CreatePost(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
   raise_exception = True
+  permission_required = ('news.add_post')
   form_class = CreatePostForm
   model = Post
   template_name = 'create_post.html'
@@ -75,8 +76,9 @@ class CreatePost(LoginRequiredMixin, CreateView):
     post.isnews = False
     return super().form_valid(form)
 
-class CreateNews(LoginRequiredMixin, CreateView):
+class CreateNews(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
   raise_exception = True
+  permission_required = ('news.add_post')
   form_class = CreatePostForm
   model = Post
   template_name = 'create_news.html'
@@ -86,13 +88,15 @@ class CreateNews(LoginRequiredMixin, CreateView):
     post.isnews = True
     return super().form_valid(form)
 
-class UpdatePost(LoginRequiredMixin, UpdateView):
+class UpdatePost(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+  permission_required = ('news.change_post')
   raise_exception = True
   form_class = CreatePostForm
   model = Post
   template_name = 'edit_post.html'
 
-class DeletePost(LoginRequiredMixin, DeleteView):
+class DeletePost(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+  permission_required = ('news.delete_post')
   raise_exception = True
   model = Post
   template_name = 'delete_post.html'

@@ -7,9 +7,13 @@
 <p>{{post.author.user.username}}</p>
 <p>{{post.created|date:'d.m.Y'}}</p>
 <p>{{post.text|censor}}</p>
+{% if perms.news.change_post %}
 <a href="{{post.id}}/update">Редактировать</a>
+{% endif %}
 &nbsp;
+{% if perms.news.delete_post %}
 <a href="{{post.id}}/delete">Удалить</a>
+{% endif %}
 </hr>
 <table cellpadding="12">
     <tr class=title>
