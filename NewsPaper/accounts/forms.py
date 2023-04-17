@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from django.core.mail import send_mail
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(label="Email")
@@ -18,3 +18,15 @@ class SignUpForm(UserCreationForm):
             "password1",
             "password2",
         )
+
+    def save(self, request):
+        user = super().save(request)
+        
+        send_mail(
+            subject='Добро пожаловать на сайт!',
+            message=f'{user.username}, вы успешно зарегистрировались!',
+            from_email=None,
+            recipient_list=[user.email]
+        )
+        
+        return user
