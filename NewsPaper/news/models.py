@@ -92,3 +92,10 @@ class Comment(models.Model):
 
   def __str__(self):
     return f'{self.user.username} про "{self.post}"'
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )

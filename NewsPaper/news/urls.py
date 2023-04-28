@@ -28,4 +28,6 @@ urlpatterns = [
     path('<int:pk>/update/', views.UpdatePost.as_view()),
 
     path('<int:pk>/delete/', views.DeletePost.as_view()),
+
+    path('subscriptions/', views.subscriptions, name='subscriptions')
 ]

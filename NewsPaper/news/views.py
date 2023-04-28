@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -101,3 +103,8 @@ class DeletePost(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
   model = Post
   template_name = 'delete_post.html'
   success_url = reverse_lazy('post_list')
+
+@login_required
+@csrf_protect
+def subscriptions(request):
+  return "OK"
