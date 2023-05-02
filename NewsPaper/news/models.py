@@ -63,7 +63,7 @@ class Post(models.Model):
 class PostCategory(models.Model):
   post=models.ForeignKey(Post, on_delete = models.CASCADE)
   category=models.ForeignKey(Category, on_delete = models.CASCADE)
- 
+
   class Meta:
     verbose_name = 'Категория новости'
     verbose_name_plural = 'Категории новостей'
@@ -94,8 +94,23 @@ class Comment(models.Model):
     return f'{self.user.username} про "{self.post}"'
 
 class Subscription(models.Model):
-    user = models.ForeignKey(
-        to=User,
-        on_delete=models.CASCADE,
-        related_name='subscriptions',
-    )
+  user = models.ForeignKey(
+    to=User,
+    on_delete=models.CASCADE,
+    related_name='subscriptions'
+  )
+  category = models.ForeignKey(
+    to='Category',
+    on_delete=models.CASCADE,
+    related_name='subscriptions',
+  )
+
+  class Meta:
+    verbose_name = 'Подписка'
+    verbose_name_plural = 'Подписки'
+    constraints = [
+      models.UniqueConstraint(fields=['user', 'category'], name='unique subscriptions')
+    ]
+
+  def __str__(self):
+    return f'{self.user.username} подписан на "{self.category}"'

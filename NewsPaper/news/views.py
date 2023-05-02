@@ -5,8 +5,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin)
 from news.filters import PostFilter
+from django.db.models import Exists, OuterRef
 from .forms import CreatePostForm
-from .models import Post
+from .models import (Post, Category, Subscription)
 
 class PostList(LoginRequiredMixin, ListView):
   raise_exception = True
@@ -107,4 +108,30 @@ class DeletePost(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 @login_required
 @csrf_protect
 def subscriptions(request):
-  return "OK"
+  if request.method == 'POST':
+    category_id = request.POST.get('category_id')
+    category = Category.objects.get(id=category_id)
+    action = request.POST.get('action')
+
+    if action == 'subscribe':
+      Subscription.objects.create(user=request.user, category=category)
+    elif action == 'unsubscribe':
+      Subscription.objects.filter(
+        user=request.user,
+        category=category,
+        ).delete()
+
+  categories_with_subscriptions = Category.objects.annotate(
+    user_subscribed=Exists(
+      Subscription.objects.filter(
+        user=request.user,
+        category=OuterRef('pk')
+      )
+    )
+  ).order_by('name')
+
+  return render(
+    request,
+    'subscriptions.html',
+    {'categories': categories_with_subscriptions}
+  )
