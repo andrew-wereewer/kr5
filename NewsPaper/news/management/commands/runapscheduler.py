@@ -24,8 +24,8 @@ def send_letter(subscription, posts):
   #print(f'\ncategory: {subscription.category.name}({subscription.category.id})')
   #print(f'user: {subscription.user.username}({subscription.user.email})')
   #[print(f"post: {p}") for p in posts]
-  text_content = '\n'.join([f'Автор: {p.author.user.username}, Название: {p.title}, Опубликокана: {p.created.strftime("%d/%m/%Y")}' for p in posts])
-  html_content = '<ul><li>'+'</li><li>'.join([f'Автор: {p.author.user.username}, Название: {p.title}, Опубликокана: {p.created.strftime("%d/%m/%Y")}</li>' for p in posts]) + '</li></ul>'
+  text_content = '\n'.join([f'Автор: {p.author.user.username}, Название: {p.title}, Опубликокана: {p.created.strftime("%d/%m/%Y")}, Ссылка: http://127.0.0.1:8000{p.get_absolute_url()}' for p in posts])
+  html_content = '<ul><li>'+'</li><li>'.join([f'Автор: {p.author.user.username}, Название: <a href="http://127.0.0.1:8000{p.get_absolute_url()}>{p.title}</a>, Опубликована: {p.created.strftime("%d/%m/%Y")}</li>' for p in posts]) + '</li></ul>'
   msg = EmailMultiAlternatives(
     f'Статьи в категории {subscription.category.name} за последнюю неделю',
      text_content, None, [subscription.user.email])
